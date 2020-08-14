@@ -1,5 +1,10 @@
 #!/bin/zsh 
 
+if [ $# = 0 ] ; then
+	echo "Erreur - Aucun paramètres"
+	exit
+fi
+
 nbF=0
 nbD=0
 
