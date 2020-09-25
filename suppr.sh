@@ -2,7 +2,7 @@
 
 if [ $# = 0 ] ; then
 	echo "Erreur - Aucun paramètres"
-	exit
+	exit 1
 fi
 
 nbF=0
@@ -19,3 +19,4 @@ for i in `seq 1 $#` ; do
 done
 
 echo "Suppression de $i éléments dont $nbD dossiers et $nbF fichiers dans la corbeille"
+exit 0
