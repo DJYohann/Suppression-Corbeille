@@ -1,22 +1,39 @@
 #!/bin/zsh 
 
-if [ $# = 0 ] ; then
-	echo "Erreur - Aucun paramètres"
-	exit 1
-fi
+doc() {
+cat << EOF 
+Description : Script de suppression dans la corbeille
 
-nbF=0
-nbD=0
+Utilisation : suppr arg
+EOF
+}
 
-for i in `seq 1 $#` ; do 	
-	if [ -d $1 ] ; then
-		nbD=$((nbD + 1))
-	else 
-		nbF=$((nbF + 1))
+usage() {
+	doc ; exit 0
+}
+
+erreur() {
+	echo "Erreur : $1" >&2
+}
+
+if [ $# -eq 0 ] ; then 
+	erreur "Argument manquant\n$0 -help pour aide" ; exit 1
+fi 
+
+while [ $# -ne 0 ] ; do 
+	if [ $1 = "-help" ] ; then
+		usage
 	fi
-	mv $1 ~/.Trash/
-	shift 
+
+	nbRep=$(find $1 -exec file  {} \; | grep "directory" | wc -l | tr -d " ")
+	nbFile=$(find $1 -exec file  {} \; | grep -v "directory" | wc -l | tr -d " ")
+
+	mv $1 /Users/$USER/.Trash
+
+	shift
 done
 
-echo "Suppression de $i éléments dont $nbD dossiers et $nbF fichiers dans la corbeille"
+echo "Suppression effectuée"
+echo "Déplacement de $nbRep dossiers et $nbFile fichiers dans la corbeille"
+
 exit 0
