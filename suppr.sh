@@ -39,7 +39,7 @@ while [ $# -ne 0 ] ; do
 	shift
 done
 
-if [ "$nbRepTotal" -ne 0 ] && [ "$nbFileTotal" -ne 0 ] ; then 
+if [ "$nbRepTotal" -ne 0 ] || [ "$nbFileTotal" -ne 0 ] ; then 
 	echo "Suppression effectuée"
 
 	if [ "$nbRepTotal" -eq 0 ] ; then 
