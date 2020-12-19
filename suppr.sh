@@ -9,25 +9,20 @@ doc() {
 cat << EOF 
 Description : Script de suppression dans la corbeille
 
-Utilisation : suppr arg
+Utilisation : 
+
+suppr arg(s) - déplace dans la corbeille le(s) argument(s) 
+suppr -help  - affiche l'aide
 EOF
 }
 
-usage() {
-	doc ; exit 0
-}
-
-erreur() {
-	echo "Erreur : $1" >&2
-}
-
 if [ $# -eq 0 ] ; then 
-	erreur "Argument manquant\n$0 -help pour aide" ; exit 1
+	doc ; exit 1
 fi 
 
 while [ $# -ne 0 ] ; do 
 	if [ "$1" = "-help" ] ; then
-		usage
+		doc ; exit 0
 	fi
 
 	if [ -e "$1" ]; then
