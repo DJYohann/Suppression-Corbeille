@@ -1,4 +1,9 @@
-#!/bin/zsh 
+#!/bin/bash
+
+nbRepTotal=0
+nbFileTotal=0
+nbRep=0
+nbFile=0
 
 doc() {
 cat << EOF 
@@ -21,19 +26,36 @@ if [ $# -eq 0 ] ; then
 fi 
 
 while [ $# -ne 0 ] ; do 
-	if [ $1 = "-help" ] ; then
+	if [ "$1" = "-help" ] ; then
 		usage
 	fi
 
-	nbRep=$(find $1 -exec file  {} \; | grep "directory" | wc -l | tr -d " ")
-	nbFile=$(find $1 -exec file  {} \; | grep -v "directory" | wc -l | tr -d " ")
+	if [ -e "$1" ]; then
+		nbRep=$(find "$1" -type d | wc -l | tr -d " ")
+		nbFile=$(find "$1" -not -type d | wc -l | tr -d " ")
+		nbRepTotal=$((nbRepTotal + nbRep))
+		nbFileTotal=$((nbFileTotal + nbFile))
 
-	mv $1 /Users/$USER/.Trash
+		mv "$1" "/Users/$USER/.Trash"
+	else 
+		echo "$1 n'existe pas"
+	fi
 
 	shift
 done
 
-echo "Suppression effectuée"
-echo "Déplacement de $nbRep dossiers et $nbFile fichiers dans la corbeille"
+if [ "$nbRepTotal" -ne 0 ] && [ "$nbFileTotal" -ne 0 ] ; then 
+	echo "Suppression effectuée"
+
+	if [ "$nbRepTotal" -eq 0 ] ; then 
+		echo "Déplacement de $nbFile fichier(s) dans la corbeille"
+	elif [ "$nbFileTotal" -eq 0 ] ; then 
+		echo "Déplacement de $nbRepTotal dossier(s) dans la corbeille"
+	else 
+		echo "Déplacement de $nbRepTotal dossier(s) et $nbFileTotal fichier(s) dans la corbeille"
+	fi 
+else 
+	echo "Aucune suppression effectuée"
+fi
 
 exit 0
