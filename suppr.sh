@@ -26,8 +26,13 @@ while [ $# -ne 0 ] ; do
 	fi
 
 	if [ -e "$1" ]; then
-		nbRep=$(find "$1" -type d | wc -l | tr -d " ")
-		nbFile=$(find "$1" -not -type d | wc -l | tr -d " ")
+		if [ -d "$1" ]; then
+			nbRep=$(find "$1" -type d | wc -l | tr -d " ")
+			nbFile=$(find "$1" -not -type d | wc -l | tr -d " ")
+		else 
+			nbFile=$((nbFile + 1))
+		fi
+
 		nbRepTotal=$((nbRepTotal + nbRep))
 		nbFileTotal=$((nbFileTotal + nbFile))
 
